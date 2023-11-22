@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import bcrypt from 'bcrypt';
 import { TAddress, TUser, TUserName } from "./user.interface";
 
 const userNameSchema = new Schema<TUserName>({
@@ -24,8 +25,13 @@ const userSchema = new Schema<TUser>({
     address: { type: addressSchema, required: true }
 });
 
-// 
-userSchema.post('save', (doc, next) => {
+userSchema.pre('save', async function (next) {
+    const saltRounds = 12;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+    next()
+})
+
+userSchema.post('save', async function (doc, next) {
     doc.password = undefined;
     next();
 })
