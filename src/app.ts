@@ -2,7 +2,6 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 
 const app: Application = express();
-const port = process.env.PORT || 5000;
 
 // Body Parser 
 app.use(express.json());
