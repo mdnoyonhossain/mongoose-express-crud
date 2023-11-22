@@ -22,4 +22,9 @@ const userSchema = new mongoose_1.Schema({
     hobbies: [{ type: String, required: true }],
     address: { type: addressSchema, required: true }
 });
+// 
+userSchema.post('save', (doc, next) => {
+    doc.password = undefined;
+    next();
+});
 exports.UserModel = (0, mongoose_1.model)('user', userSchema);

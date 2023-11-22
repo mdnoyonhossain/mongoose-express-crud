@@ -24,5 +24,11 @@ const userSchema = new Schema<TUser>({
     address: { type: addressSchema, required: true }
 });
 
+// 
+userSchema.post('save', (doc, next) => {
+    doc.password = undefined;
+    next();
+})
+
 
 export const UserModel = model<TUser>('user', userSchema);
