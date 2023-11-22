@@ -21,5 +21,5 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.UserServices = {
     createUserIntoDB,
-    getAllUserFromDB
+    getAllUserFromDB,
 };

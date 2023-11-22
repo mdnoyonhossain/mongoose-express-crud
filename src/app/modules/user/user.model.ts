@@ -25,6 +25,7 @@ const userSchema = new Schema<TUser>({
     address: { type: addressSchema, required: true }
 });
 
+
 userSchema.pre('save', async function (next) {
     const saltRounds = 12;
     this.password = await bcrypt.hash(this.password, saltRounds);
@@ -35,6 +36,8 @@ userSchema.post('save', async function (doc, next) {
     doc.password = undefined;
     next();
 });
+
+
 
 
 export const UserModel = model<TUser>('user', userSchema);

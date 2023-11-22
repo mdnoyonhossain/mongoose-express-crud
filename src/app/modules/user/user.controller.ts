@@ -47,7 +47,9 @@ const getAllUser = async (req: Request, res: Response) => {
     }
 }
 
+
+
 export const UserControllers = {
     createUser,
-    getAllUser
+    getAllUser,
 }

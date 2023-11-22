@@ -13,5 +13,5 @@ const getAllUserFromDB = async () => {
 
 export const UserServices = {
     createUserIntoDB,
-    getAllUserFromDB
+    getAllUserFromDB,
 }
