@@ -34,7 +34,7 @@ userSchema.pre('save', async function (next) {
 userSchema.post('save', async function (doc, next) {
     doc.password = undefined;
     next();
-})
+});
 
 
 export const UserModel = model<TUser>('user', userSchema);

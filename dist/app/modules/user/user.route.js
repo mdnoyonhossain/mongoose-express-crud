@@ -8,4 +8,5 @@ const express_1 = __importDefault(require("express"));
 const user_controller_1 = require("./user.controller");
 const router = express_1.default.Router();
 router.post('/users', user_controller_1.UserControllers.createUser);
+router.get('/users', user_controller_1.UserControllers.getAllUser);
 exports.UserRoutes = router;
