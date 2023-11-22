@@ -12,6 +12,4 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Mongoose Express CRUD Server is Running.');
 });
 
-app.listen(port, () => {
-    console.log(`Mongoose Express CRUD on Port: ${port}`);
-})
+export default app;
