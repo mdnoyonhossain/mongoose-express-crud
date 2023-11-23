@@ -13,8 +13,13 @@ const getAllUserFromDB = async () => {
 }
 
 const getUserSpecificFromDB = async (userId: any) => {
-    const result = await UserModel.findOne({userId}, {password: 0, _id: 0});
-    return result;
+    const result = await UserModel.findOne({ userId }, { password: 0, _id: 0 });
+    if (await UserModel.isExistsUser(userId)) {
+        return result;
+    }
+    else {
+        throw new Error('User not Exists!');
+    }
 }
 
 const deleteUserFromDB = async (userId: any) => {

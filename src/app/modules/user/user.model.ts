@@ -40,7 +40,7 @@ userSchema.post('save', async function (doc, next) {
 
 // Static Method
 userSchema.statics.isExistsUser = async function (userId: TUser) {
-    const existingUser = await UserModel.findOneAndDelete({userId: userId});
+    const existingUser = await UserModel.findOne({ userId: userId });
     return existingUser;
 }
 

@@ -21,7 +21,12 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getUserSpecificFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.findOne({ userId }, { password: 0, _id: 0 });
-    return result;
+    if (yield user_model_1.UserModel.isExistsUser(userId)) {
+        return result;
+    }
+    else {
+        throw new Error('User not Exists!');
+    }
 });
 const deleteUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.deleteOne({ userId });

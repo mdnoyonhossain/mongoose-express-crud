@@ -53,7 +53,7 @@ userSchema.post('save', function (doc, next) {
 // Static Method
 userSchema.statics.isExistsUser = function (userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const existingUser = yield exports.UserModel.findOneAndDelete({ userId: userId });
+        const existingUser = yield exports.UserModel.findOne({ userId: userId });
         return existingUser;
     });
 };
