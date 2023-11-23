@@ -41,10 +41,35 @@ const deleteUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function*
     const result = yield user_model_1.UserModel.deleteOne({ userId });
     return result;
 });
+const userUpdateOrderDB = (userId, updatedData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.updateOne(userId, updatedData);
+    return result;
+});
+const getUserOrderFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.findOne({ userId }, { orders: 1, _id: 0 });
+    if (yield user_model_1.UserModel.isExistsUser(userId)) {
+        return result;
+    }
+    else {
+        throw new Error('User not Exists!');
+    }
+});
+const userOrderPriceCalculateFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const totalOrderPrice = yield user_model_1.UserModel.findOne({ userId });
+    if (yield user_model_1.UserModel.isExistsUser(userId)) {
+        return totalOrderPrice;
+    }
+    else {
+        throw new Error('User notttt Exists!');
+    }
+});
 exports.UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
     getUserSpecificFromDB,
     updateUserFromDB,
     deleteUserFromDB,
+    userUpdateOrderDB,
+    getUserOrderFromDB,
+    userOrderPriceCalculateFromDB
 };

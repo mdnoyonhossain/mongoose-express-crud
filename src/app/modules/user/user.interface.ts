@@ -12,6 +12,12 @@ export type TAddress = {
     country: string;
 }
 
+export type TOrder = {
+    productName: string;
+    price: number;
+    quantity: number;
+}
+
 export type TUser = {
     userId: number;
     username: string;
@@ -22,6 +28,7 @@ export type TUser = {
     isActive: boolean;
     hobbies: string[];
     address: TAddress;
+    orders?: TOrder[];
 }
 
 // Statics Method 

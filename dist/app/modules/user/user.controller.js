@@ -29,7 +29,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not Create",
             error: {
@@ -50,7 +50,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -72,7 +72,7 @@ const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
     catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -88,8 +88,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const updatedData = req.body;
         const result = yield user_service_1.UserServices.updateUserFromDB(userId, updatedData);
         // Update Response Data hide 
-        // updatedData.password = undefined;
-        if (result.upsertedCount === 1 && result.matchedCount === 1) {
+        updatedData.password = undefined;
+        if (result.upsertedCount === 1 && result.matchedCount === 1 && userId) {
             res.status(200).json({
                 success: true,
                 message: "User updated successfully!",
@@ -99,13 +99,13 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         else {
             res.status(200).json({
                 success: true,
-                message: "User Find successfully!",
+                message: "User updated successfully!",
                 data: updatedData
             });
         }
     }
     catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -142,10 +142,105 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+// user Order 
+const userOrderUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const productData = req.body;
+        const result = yield user_service_1.UserServices.userUpdateOrderDB({ userId }, {
+            $push: {
+                orders: {
+                    productName: productData.productName,
+                    price: productData.price,
+                    quantity: productData.quantity,
+                },
+            },
+        });
+        if (result.modifiedCount > 0 && userId) {
+            res.status(200).json({
+                success: true,
+                message: "Order created successfully!",
+                data: result,
+            });
+        }
+        else {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not Exists!"
+                }
+            });
+        }
+    }
+    catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        });
+    }
+});
+// Get user Order 
+const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.userId;
+        const result = yield user_service_1.UserServices.getUserOrderFromDB(id);
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: result
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        });
+    }
+});
+// Calculate Total Price of Orders for a Specific User
+const userOrderPriceCalculate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const { userId } = req.params;
+        const user = yield user_service_1.UserServices.userOrderPriceCalculateFromDB(userId);
+        // Total Order Price 
+        const totalPrice = (_a = user === null || user === void 0 ? void 0 : user.orders) === null || _a === void 0 ? void 0 : _a.reduce((init, order) => init + order.price * order.quantity, 0);
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: {
+                totalPrice: totalPrice
+            }
+        });
+    }
+    catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        });
+    }
+});
 exports.UserControllers = {
     createUser,
     getAllUser,
     getSpecificUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    userOrderUpdate,
+    getUserOrder,
+    userOrderPriceCalculate
 };

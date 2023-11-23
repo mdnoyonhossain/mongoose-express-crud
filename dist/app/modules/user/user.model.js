@@ -24,6 +24,11 @@ const addressSchema = new mongoose_1.Schema({
     city: { type: String, required: true },
     country: { type: String, required: true }
 });
+const orderSchema = new mongoose_1.Schema({
+    productName: { type: String, required: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+});
 const userSchema = new mongoose_1.Schema({
     userId: { type: Number, unique: true },
     username: { type: String, unique: true },
@@ -33,7 +38,8 @@ const userSchema = new mongoose_1.Schema({
     email: { type: String, required: true },
     isActive: { type: Boolean, required: true },
     hobbies: [{ type: String, required: true }],
-    address: { type: addressSchema, required: true }
+    address: { type: addressSchema, required: true },
+    orders: { type: [orderSchema], default: [] },
 });
 // pre middleware / Hook
 userSchema.pre('save', function (next) {
@@ -50,15 +56,6 @@ userSchema.post('save', function (doc, next) {
         next();
     });
 });
-userSchema.pre('updateOne', function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const data = this.getUpdate();
-        const saltRounds = 12;
-        // console.log(data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds));
-        data['$set']['password'] = yield bcrypt_1.default.hash(data['$set']['password'], saltRounds);
-        next();
-    });
-});
 // Static Method
 userSchema.statics.isExistsUser = function (userId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -66,4 +63,5 @@ userSchema.statics.isExistsUser = function (userId) {
         return existingUser;
     });
 };
+// User Model 
 exports.UserModel = (0, mongoose_1.model)('user', userSchema);

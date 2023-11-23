@@ -18,7 +18,7 @@ const createUser = async (req: Request, res: Response) => {
             data: result
         })
     } catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not Create",
             error: {
@@ -40,7 +40,7 @@ const getAllUser = async (req: Request, res: Response) => {
             data: user
         })
     } catch (error) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -63,7 +63,7 @@ const getSpecificUser = async (req: Request, res: Response) => {
             data: result
         });
     } catch (error: any) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -81,24 +81,24 @@ const updateUser = async (req: Request, res: Response) => {
         const result = await UserServices.updateUserFromDB(userId, updatedData);
 
         // Update Response Data hide 
-        // updatedData.password = undefined;
+        updatedData.password = undefined;
 
-        if(result.upsertedCount === 1 && result.matchedCount === 1){
+        if (result.upsertedCount === 1 && result.matchedCount === 1 && userId) {
             res.status(200).json({
                 success: true,
                 message: "User updated successfully!",
                 data: updatedData
             });
-        }else{
+        } else {
             res.status(200).json({
                 success: true,
-                message: "User Find successfully!",
+                message: "User updated successfully!",
                 data: updatedData
             });
         }
-        
+
     } catch (error: any) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {
@@ -136,10 +136,112 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 }
 
+// user Order 
+const userOrderUpdate = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const productData = req.body;
+
+        const result = await UserServices.userUpdateOrderDB(
+            { userId },
+            {
+                $push: {
+                    orders: {
+                        productName: productData.productName,
+                        price: productData.price,
+                        quantity: productData.quantity,
+                    },
+                },
+            }
+        );
+
+        if (result.modifiedCount > 0 && userId) {
+            res.status(200).json({
+                success: true,
+                message: "Order created successfully!",
+                data: result,
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not Exists!"
+                }
+            })
+        }
+    }
+    catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        })
+    }
+}
+
+// Get user Order 
+const getUserOrder = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.userId;
+        const result = await UserServices.getUserOrderFromDB(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: result
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        })
+    }
+}
+
+// Calculate Total Price of Orders for a Specific User
+const userOrderPriceCalculate = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const user = await UserServices.userOrderPriceCalculateFromDB(userId);
+        // Total Order Price 
+        const totalPrice = user?.orders?.reduce((init, order) => init + order.price * order.quantity, 0);
+
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: {
+                totalPrice: totalPrice
+            }
+        });
+
+    } catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        })
+    }
+}
+
 export const UserControllers = {
     createUser,
     getAllUser,
     getSpecificUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    userOrderUpdate,
+    getUserOrder,
+    userOrderPriceCalculate
 }

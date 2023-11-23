@@ -12,4 +12,7 @@ router.get('/users', user_controller_1.UserControllers.getAllUser);
 router.get('/users/:userId', user_controller_1.UserControllers.getSpecificUser);
 router.put('/users/:userId', user_controller_1.UserControllers.updateUser);
 router.delete('/users/:userId', user_controller_1.UserControllers.deleteUser);
+router.put('/users/:userId/orders', user_controller_1.UserControllers.userOrderUpdate);
+router.get('/users/:userId/orders', user_controller_1.UserControllers.getUserOrder);
+router.get('/users/:userId/orders/total-price', user_controller_1.UserControllers.userOrderPriceCalculate);
 exports.UserRoutes = router;

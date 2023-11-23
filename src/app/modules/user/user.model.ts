@@ -11,7 +11,13 @@ const addressSchema = new Schema<TAddress>({
     street: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true }
-})
+});
+
+const orderSchema = new Schema({
+    productName: { type: String, required: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+});
 
 const userSchema = new Schema<TUser, IUserModel>({
     userId: { type: Number, unique: true },
@@ -22,7 +28,8 @@ const userSchema = new Schema<TUser, IUserModel>({
     email: { type: String, required: true },
     isActive: { type: Boolean, required: true },
     hobbies: [{ type: String, required: true }],
-    address: { type: addressSchema, required: true }
+    address: { type: addressSchema, required: true },
+    orders: { type: [orderSchema], default: [] },
 });
 
 // pre middleware / Hook
@@ -38,18 +45,11 @@ userSchema.post('save', async function (doc, next) {
     next();
 });
 
-userSchema.pre('updateOne', async function (next) {
-    const data = this.getUpdate();
-    const saltRounds = 12;
-    // console.log(data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds));
-    data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds);
-    next()
-})
-
 // Static Method
 userSchema.statics.isExistsUser = async function (userId: TUser) {
     const existingUser = await UserModel.findOne({ userId: userId });
     return existingUser;
 }
 
+// User Model 
 export const UserModel = model<TUser, IUserModel>('user', userSchema);
