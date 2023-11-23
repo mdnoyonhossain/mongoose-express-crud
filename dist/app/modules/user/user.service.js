@@ -19,7 +19,20 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.UserModel.find({}, { _id: 0, username: 1, fullName: 1, age: 1, email: 1, address: 1 });
     return users;
 });
+const getUserSpecificFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.findOne({ userId }, { password: 0, _id: 0 });
+    if (yield !user_model_1.UserModel.isExistsUser) {
+        throw Error('User Not Exists');
+    }
+    return result;
+});
+const deleteUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.deleteOne({ userId });
+    return result;
+});
 exports.UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
+    getUserSpecificFromDB,
+    deleteUserFromDB,
 };

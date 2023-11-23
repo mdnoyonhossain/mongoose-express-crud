@@ -35,6 +35,7 @@ const userSchema = new mongoose_1.Schema({
     hobbies: [{ type: String, required: true }],
     address: { type: addressSchema, required: true }
 });
+// pre middleware / Hook
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const saltRounds = 12;
@@ -42,10 +43,18 @@ userSchema.pre('save', function (next) {
         next();
     });
 });
+// post middleware / Hook
 userSchema.post('save', function (doc, next) {
     return __awaiter(this, void 0, void 0, function* () {
         doc.password = undefined;
         next();
     });
 });
+// instance Method
+userSchema.statics.isExistsUser = function (userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const existingUser = yield exports.UserModel.findOne({ userId });
+        return existingUser;
+    });
+};
 exports.UserModel = (0, mongoose_1.model)('user', userSchema);

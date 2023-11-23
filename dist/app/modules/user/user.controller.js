@@ -58,7 +58,52 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.userId;
+        const result = yield user_service_1.UserServices.getUserSpecificFromDB(userId);
+        res.status(200).json({
+            success: true,
+            message: "User fetched successfully!",
+            data: result
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        });
+    }
+});
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.userId;
+        const result = yield user_service_1.UserServices.deleteUserFromDB(userId);
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully!",
+            data: result
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found!"
+            }
+        });
+    }
+});
 exports.UserControllers = {
     createUser,
     getAllUser,
+    getSpecificUser,
+    deleteUser
 };

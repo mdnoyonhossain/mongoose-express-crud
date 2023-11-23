@@ -11,7 +11,22 @@ const getAllUserFromDB = async () => {
     return users;
 }
 
+const getUserSpecificFromDB = async (userId: string) => {
+    const result = await UserModel.findOne({ userId }, { password: 0, _id: 0 });
+    if (await !UserModel.isExistsUser) {
+        throw Error('User Not Exists');
+    }
+    return result;
+}
+
+const deleteUserFromDB = async (userId: string) => {
+    const result = await UserModel.deleteOne({userId});
+    return result;
+}
+
 export const UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
+    getUserSpecificFromDB,
+    deleteUserFromDB,
 }

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import bcrypt from 'bcrypt';
-import { TAddress, TUser, TUserName } from "./user.interface";
+import { IUserModel, TAddress, TUser, TUserName } from "./user.interface";
 
 const userNameSchema = new Schema<TUserName>({
     firstName: { type: String, required: true },
@@ -13,7 +13,7 @@ const addressSchema = new Schema<TAddress>({
     country: { type: String, required: true }
 })
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, IUserModel>({
     userId: { type: Number, unique: true },
     username: { type: String, unique: true },
     password: { type: String, required: true },
@@ -25,19 +25,23 @@ const userSchema = new Schema<TUser>({
     address: { type: addressSchema, required: true }
 });
 
-
+// pre middleware / Hook
 userSchema.pre('save', async function (next) {
     const saltRounds = 12;
     this.password = await bcrypt.hash(this.password, saltRounds);
     next()
 })
 
+// post middleware / Hook
 userSchema.post('save', async function (doc, next) {
     doc.password = undefined;
     next();
 });
 
+// instance Method
+userSchema.statics.isExistsUser = async function (userId: number) {
+    const existingUser = await UserModel.findOne({userId});
+    return existingUser;
+}
 
-
-
-export const UserModel = model<TUser>('user', userSchema);
+export const UserModel = model<TUser, IUserModel>('user', userSchema);
