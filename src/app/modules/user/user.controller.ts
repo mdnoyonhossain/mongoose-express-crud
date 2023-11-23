@@ -74,6 +74,38 @@ const getSpecificUser = async (req: Request, res: Response) => {
     }
 }
 
+const updateUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+        const updatedData = req.body;
+        const result = await UserServices.updateUserFromDB(userId, updatedData);
+
+        if(result.upsertedCount === 1 && result.matchedCount === 1){
+            res.status(200).json({
+                success: true,
+                message: "User updated successfully!",
+                data: updatedData
+            });
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "User Find successfully!",
+                data: updatedData
+            });
+        }
+        
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: error.message || "User not found!"
+            }
+        });
+    }
+}
+
 // Delete User Controller
 const deleteUser = async (req: Request, res: Response) => {
     try {
@@ -105,5 +137,6 @@ export const UserControllers = {
     createUser,
     getAllUser,
     getSpecificUser,
+    updateUser,
     deleteUser
 }

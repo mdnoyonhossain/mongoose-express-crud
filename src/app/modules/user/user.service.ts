@@ -22,6 +22,16 @@ const getUserSpecificFromDB = async (userId: any) => {
     }
 }
 
+const updateUserFromDB = async (userId: any, updatedData: TUser) => {
+    const result = await UserModel.updateOne({ userId: userId }, { $set: updatedData });
+    if (await UserModel.isExistsUser(userId)) {
+        return result;
+    }
+    else {
+        throw new Error('User not Exists!');
+    }
+}
+
 const deleteUserFromDB = async (userId: any) => {
     const result = await UserModel.deleteOne({ userId });
     return result;
@@ -31,5 +41,6 @@ export const UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
     getUserSpecificFromDB,
+    updateUserFromDB,
     deleteUserFromDB,
 }

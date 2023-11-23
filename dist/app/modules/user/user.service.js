@@ -28,6 +28,15 @@ const getUserSpecificFromDB = (userId) => __awaiter(void 0, void 0, void 0, func
         throw new Error('User not Exists!');
     }
 });
+const updateUserFromDB = (userId, updatedData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.updateOne({ userId: userId }, { $set: updatedData });
+    if (yield user_model_1.UserModel.isExistsUser(userId)) {
+        return result;
+    }
+    else {
+        throw new Error('User not Exists!');
+    }
+});
 const deleteUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.deleteOne({ userId });
     return result;
@@ -36,5 +45,6 @@ exports.UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
     getUserSpecificFromDB,
+    updateUserFromDB,
     deleteUserFromDB,
 };
