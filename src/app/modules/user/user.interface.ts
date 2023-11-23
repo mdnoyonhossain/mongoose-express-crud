@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model } from "mongoose";
 
 export type TUserName = {
@@ -23,8 +24,7 @@ export type TUser = {
     address: TAddress;
 }
 
-// Instance Method 
+// Statics Method 
 export interface IUserModel extends Model<TUser> {
-    // eslint-disable-next-line no-unused-vars
     isExistsUser(userId: number): Promise<TUser | null>
 }

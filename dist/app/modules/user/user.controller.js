@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
 const user_service_1 = require("./user.service");
 const user_validation_schema_1 = __importDefault(require("./user.validation.schema"));
+// Create User Controller
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.body;
@@ -38,6 +39,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+// all User Controller
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_service_1.UserServices.getAllUserFromDB();
@@ -58,19 +60,19 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+// Single User Controller
 const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.params.userId;
+        const { userId } = req.params;
         const result = yield user_service_1.UserServices.getUserSpecificFromDB(userId);
         res.status(200).json({
             success: true,
             message: "User fetched successfully!",
             data: result
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: "User not found",
             error: {
@@ -80,15 +82,21 @@ const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
+// Delete User Controller
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userId;
         const result = yield user_service_1.UserServices.deleteUserFromDB(userId);
-        res.status(200).json({
-            success: true,
-            message: "User deleted successfully!",
-            data: result
-        });
+        if (result.deletedCount === 1) {
+            res.status(200).json({
+                success: true,
+                message: "User deleted successfully!",
+                data: result
+            });
+        }
+        else {
+            throw new Error('Uesr not found!');
+        }
     }
     catch (error) {
         res.status(500).json({
@@ -96,7 +104,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             message: "User not found",
             error: {
                 code: 404,
-                description: "User not found!"
+                description: error.message || "User not found!"
             }
         });
     }

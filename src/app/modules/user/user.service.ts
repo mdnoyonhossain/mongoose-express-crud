@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
 
@@ -11,16 +12,13 @@ const getAllUserFromDB = async () => {
     return users;
 }
 
-const getUserSpecificFromDB = async (userId: string) => {
-    const result = await UserModel.findOne({ userId }, { password: 0, _id: 0 });
-    if (await !UserModel.isExistsUser) {
-        throw Error('User Not Exists');
-    }
+const getUserSpecificFromDB = async (userId: any) => {
+    const result = await UserModel.findOne({userId}, {password: 0, _id: 0});
     return result;
 }
 
-const deleteUserFromDB = async (userId: string) => {
-    const result = await UserModel.deleteOne({userId});
+const deleteUserFromDB = async (userId: any) => {
+    const result = await UserModel.deleteOne({ userId });
     return result;
 }
 
