@@ -50,6 +50,15 @@ userSchema.post('save', function (doc, next) {
         next();
     });
 });
+userSchema.pre('updateOne', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const data = this.getUpdate();
+        const saltRounds = 12;
+        // console.log(data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds));
+        data['$set']['password'] = yield bcrypt_1.default.hash(data['$set']['password'], saltRounds);
+        next();
+    });
+});
 // Static Method
 userSchema.statics.isExistsUser = function (userId) {
     return __awaiter(this, void 0, void 0, function* () {

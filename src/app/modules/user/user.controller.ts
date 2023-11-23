@@ -80,6 +80,9 @@ const updateUser = async (req: Request, res: Response) => {
         const updatedData = req.body;
         const result = await UserServices.updateUserFromDB(userId, updatedData);
 
+        // Update Response Data hide 
+        // updatedData.password = undefined;
+
         if(result.upsertedCount === 1 && result.matchedCount === 1){
             res.status(200).json({
                 success: true,

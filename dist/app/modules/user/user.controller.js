@@ -87,6 +87,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userId = req.params.userId;
         const updatedData = req.body;
         const result = yield user_service_1.UserServices.updateUserFromDB(userId, updatedData);
+        // Update Response Data hide 
+        // updatedData.password = undefined;
         if (result.upsertedCount === 1 && result.matchedCount === 1) {
             res.status(200).json({
                 success: true,

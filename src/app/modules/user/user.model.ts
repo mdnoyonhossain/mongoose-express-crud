@@ -38,6 +38,14 @@ userSchema.post('save', async function (doc, next) {
     next();
 });
 
+userSchema.pre('updateOne', async function (next) {
+    const data = this.getUpdate();
+    const saltRounds = 12;
+    // console.log(data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds));
+    data['$set']['password'] = await bcrypt.hash(data['$set']['password'], saltRounds);
+    next()
+})
+
 // Static Method
 userSchema.statics.isExistsUser = async function (userId: TUser) {
     const existingUser = await UserModel.findOne({ userId: userId });
