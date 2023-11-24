@@ -44,7 +44,7 @@ https://mongoose-express-crud-amber.vercel.app
 ### 2. Retrieve a list of all users
 
 - Endpoint: **GET /api/users**
-- Response: List of user objects. Each object should only contain `username`, `fullName`, `age`, `email`, `address` . Apply suitable field filtering to exclusively retrieve the necessary information.
+
 - Response: List of user objects. In each object only u`username`, `fullName`, `age`, `email`, `address` response. and applied project field filtering to retrieve data.
 
 ```json
@@ -169,7 +169,7 @@ https://mongoose-express-crud-amber.vercel.app
     "price": "number",
     "quantity": "number"
 }
-
+```
 
 ### 2. Retrieve all orders for a specific user
 
