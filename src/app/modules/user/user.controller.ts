@@ -202,7 +202,7 @@ const getUserOrder = async (req: Request, res: Response) => {
     }
 }
 
-// Calculate Total Price of Orders for a Specific User
+// Calculate Total Price of Orders for Specific User
 const userOrderPriceCalculate = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
