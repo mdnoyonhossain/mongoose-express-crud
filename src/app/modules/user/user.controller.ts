@@ -74,6 +74,7 @@ const getSpecificUser = async (req: Request, res: Response) => {
     }
 }
 
+// update user controller
 const updateUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
@@ -83,19 +84,13 @@ const updateUser = async (req: Request, res: Response) => {
         // Update Response Data hide 
         updatedData.password = undefined;
 
-        if (result.upsertedCount === 1 && result.matchedCount === 1 && userId) {
+        if (result.matchedCount === 1 && result.modifiedCount === 1 && result.acknowledged === true && userId) {
             res.status(200).json({
                 success: true,
                 message: "User updated successfully!",
                 data: updatedData
             });
-        } else {
-            res.status(200).json({
-                success: true,
-                message: "User updated successfully!",
-                data: updatedData
-            });
-        }
+        } 
 
     } catch (error: any) {
         res.status(404).json({
@@ -159,7 +154,7 @@ const userOrderUpdate = async (req: Request, res: Response) => {
             res.status(200).json({
                 success: true,
                 message: "Order created successfully!",
-                data: result,
+                data: productData,
             });
         } else {
             res.status(404).json({
@@ -196,7 +191,7 @@ const getUserOrder = async (req: Request, res: Response) => {
             data: result
         })
     } catch (error: any) {
-        res.status(500).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {

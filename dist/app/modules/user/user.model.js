@@ -53,6 +53,7 @@ userSchema.pre('save', function (next) {
 userSchema.post('save', function (doc, next) {
     return __awaiter(this, void 0, void 0, function* () {
         doc.password = undefined;
+        doc.orders = undefined;
         next();
     });
 });

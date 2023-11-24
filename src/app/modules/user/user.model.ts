@@ -42,6 +42,7 @@ userSchema.pre('save', async function (next) {
 // post middleware / Hook
 userSchema.post('save', async function (doc, next) {
     doc.password = undefined;
+    doc.orders = undefined;
     next();
 });
 

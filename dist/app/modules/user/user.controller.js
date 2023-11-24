@@ -82,6 +82,7 @@ const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
+// update user controller
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userId;
@@ -89,14 +90,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield user_service_1.UserServices.updateUserFromDB(userId, updatedData);
         // Update Response Data hide 
         updatedData.password = undefined;
-        if (result.upsertedCount === 1 && result.matchedCount === 1 && userId) {
-            res.status(200).json({
-                success: true,
-                message: "User updated successfully!",
-                data: updatedData
-            });
-        }
-        else {
+        if (result.matchedCount === 1 && result.modifiedCount === 1 && result.acknowledged === true && userId) {
             res.status(200).json({
                 success: true,
                 message: "User updated successfully!",
@@ -160,7 +154,7 @@ const userOrderUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function
             res.status(200).json({
                 success: true,
                 message: "Order created successfully!",
-                data: result,
+                data: productData,
             });
         }
         else {
@@ -197,7 +191,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
-        res.status(500).json({
+        res.status(404).json({
             success: false,
             message: "User not found",
             error: {

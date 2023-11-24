@@ -13,7 +13,7 @@ const getAllUserFromDB = async () => {
 }
 
 const getUserSpecificFromDB = async (userId: any) => {
-    const result = await UserModel.findOne({ userId }, { password: 0, _id: 0 });
+    const result = await UserModel.findOne({ userId }, { password: 0, _id: 0, orders: 0 });
     if (await UserModel.isExistsUser(userId)) {
         return result;
     }
@@ -60,7 +60,7 @@ const userOrderPriceCalculateFromDB = async (userId: any) => {
         return totalOrderPrice
     }
     else {
-        throw new Error('User notttt Exists!');
+        throw new Error('User not Exists!');
     }
 }
 

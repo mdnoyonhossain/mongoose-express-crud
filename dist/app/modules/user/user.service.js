@@ -20,7 +20,7 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return users;
 });
 const getUserSpecificFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.UserModel.findOne({ userId }, { password: 0, _id: 0 });
+    const result = yield user_model_1.UserModel.findOne({ userId }, { password: 0, _id: 0, orders: 0 });
     if (yield user_model_1.UserModel.isExistsUser(userId)) {
         return result;
     }
@@ -60,7 +60,7 @@ const userOrderPriceCalculateFromDB = (userId) => __awaiter(void 0, void 0, void
         return totalOrderPrice;
     }
     else {
-        throw new Error('User notttt Exists!');
+        throw new Error('User not Exists!');
     }
 });
 exports.UserServices = {

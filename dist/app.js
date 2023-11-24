@@ -13,6 +13,6 @@ app.use((0, cors_1.default)());
 // Applicaton Routes
 app.use('/api', user_route_1.UserRoutes);
 app.get('/', (req, res) => {
-    res.send('Mongoose Express CRUD Server is Running.');
+    res.send('Mongoose Express Typescript CRUD Backend Server is Running.');
 });
 exports.default = app;
